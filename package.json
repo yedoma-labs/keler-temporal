@@ -27,7 +27,7 @@
     "typescript"
   ],
   "scripts": {
-    "build": "vite build && node -e \"const{cpSync,rmSync}=require('node:fs');cpSync('dist/src','dist',{recursive:true});rmSync('dist/src',{recursive:true})\"",
+    "build": "vite build",
     "dev": "vite build --watch",
     "test": "vitest run --reporter=verbose",
     "test:watch": "vitest",

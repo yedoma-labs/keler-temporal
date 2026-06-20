@@ -17,7 +17,12 @@ export default defineConfig({
       include: ['src/**/*'],
       exclude: ['src/**/__tests__/**'],
       outDirs: ['dist', { dir: 'dist', moduleFormat: 'cjs' }],
-      entryRoot: 'src',
+      entryRoot: resolve(__dirname, 'src'),
+      beforeWriteFile(filePath, content) {
+        const fixed = filePath.replace('/dist/src/', '/dist/');
+        if (fixed !== filePath) console.log('[dts] path fix:', filePath, '->', fixed);
+        return { filePath: fixed, content };
+      },
     }),
   ],
   build: {
