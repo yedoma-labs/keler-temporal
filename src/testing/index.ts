@@ -1,5 +1,5 @@
-import { getClock, resetClock, setClock } from '../clock.js';
 import type { Clock } from '../clock.js';
+import { getClock, resetClock, setClock } from '../clock.js';
 
 // ─── Clock freeze ────────────────────────────────────────────────────────────
 

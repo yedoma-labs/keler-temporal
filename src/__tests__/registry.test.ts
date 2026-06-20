@@ -10,7 +10,7 @@ afterEach(() => {
 const mockAdapter: TemporalAdapter<{ _isMock: true; ms: number }> = {
   name: 'mock',
   detect: (v): v is { _isMock: true; ms: number } =>
-    typeof v === 'object' && v !== null && (v as Record<string, unknown>)['_isMock'] === true,
+    typeof v === 'object' && v !== null && (v as Record<string, unknown>)._isMock === true,
   toEpochMs: (v) => v.ms,
 };
 
@@ -28,7 +28,11 @@ describe('registerAdapter', () => {
 
   it('throws when detect is not a function', () => {
     expect(() =>
-      registerAdapter({ name: 'bad', detect: 'oops' as unknown as (v: unknown) => v is never, toEpochMs: () => 0 }),
+      registerAdapter({
+        name: 'bad',
+        detect: 'oops' as unknown as (v: unknown) => v is never,
+        toEpochMs: () => 0,
+      }),
     ).toThrow(TemporalAdapterError);
   });
 

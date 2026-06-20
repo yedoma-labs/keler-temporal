@@ -8,7 +8,7 @@ import {
 
 afterEach(() => {
   disableMigrationWarnings();
-  delete process.env['NODE_ENV'];
+  delete process.env.NODE_ENV;
 });
 
 describe('enableMigrationWarnings', () => {
@@ -18,7 +18,7 @@ describe('enableMigrationWarnings', () => {
   });
 
   it('throws in production', () => {
-    process.env['NODE_ENV'] = 'production';
+    process.env.NODE_ENV = 'production';
     expect(() => enableMigrationWarnings()).toThrow('called in production');
   });
 });

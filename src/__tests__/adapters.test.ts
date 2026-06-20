@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { toTemporal } from '../converters.js';
-import { clearAdapters, registerAdapter } from '../registry.js';
 import { dayjsAdapter } from '../adapters/dayjs.js';
 import { luxonAdapter } from '../adapters/luxon.js';
 import { momentAdapter } from '../adapters/moment.js';
+import { toTemporal } from '../converters.js';
+import { clearAdapters, registerAdapter } from '../registry.js';
 
 const EPOCH_MS = 1_750_000_000_000;
 

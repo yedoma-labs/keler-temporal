@@ -186,9 +186,7 @@ export function toEpochMs(value: unknown): number {
   const adapter = findAdapter(value);
   if (adapter) return adapter.toEpochMs(value);
 
-  throw new TemporalConversionError(
-    `Cannot extract epoch ms from value of type "${typeof value}"`,
-  );
+  throw new TemporalConversionError(`Cannot extract epoch ms from value of type "${typeof value}"`);
 }
 
 // ─── extractFields ──────────────────────────────────────────────────────────

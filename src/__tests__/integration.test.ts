@@ -3,7 +3,8 @@
  * These verify that the layers compose correctly end-to-end.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fromTemporal, toTemporal } from '../converters.js';
+import { luxonAdapter } from '../adapters/luxon.js';
+import { momentAdapter } from '../adapters/moment.js';
 import {
   addDays,
   differenceInDays,
@@ -12,9 +13,8 @@ import {
   parseISO,
   startOfMonth,
 } from '../compat/index.js';
+import { fromTemporal, toTemporal } from '../converters.js';
 import { clearAdapters, registerAdapter } from '../registry.js';
-import { momentAdapter } from '../adapters/moment.js';
-import { luxonAdapter } from '../adapters/luxon.js';
 import { disableMigrationWarnings, enableMigrationWarnings } from '../warnings.js';
 
 afterEach(() => {
@@ -22,7 +22,7 @@ afterEach(() => {
   disableMigrationWarnings();
 });
 
-const TZ = 'Europe/Berlin';
+const _TZ = 'Europe/Berlin';
 
 describe('legacy Date → compat → back to Date', () => {
   it('round-trips date arithmetic via compat', () => {

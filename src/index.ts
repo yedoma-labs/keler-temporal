@@ -1,3 +1,4 @@
+export type { FromTemporalOptions } from './converters.js';
 export {
   extractFields,
   fromTemporal,
@@ -5,27 +6,26 @@ export {
   toEpochMs,
   toTemporal,
 } from './converters.js';
-export type { FromTemporalOptions } from './converters.js';
 export {
   TemporalAdapterError,
   TemporalConversionError,
   TemporalNotAvailableError,
 } from './errors.js';
 export { clearAdapters, findAdapter, listAdapters, registerAdapter } from './registry.js';
-export type { TemporalAdapter } from './types.js';
 export type {
   DateTimeFields,
   DisambiguationOption,
   LegacyDateInput,
   NativeTemporalType,
+  TemporalAdapter,
   TemporalInput,
   TemporalOutput,
   ToTemporalOptions,
 } from './types.js';
+export type { MigrationWarningsOptions } from './warnings.js';
 export {
   disableMigrationWarnings,
   emitMigrationWarning,
   enableMigrationWarnings,
   isMigrationWarningsEnabled,
 } from './warnings.js';
-export type { MigrationWarningsOptions } from './warnings.js';

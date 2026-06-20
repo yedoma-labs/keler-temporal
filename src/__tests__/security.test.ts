@@ -3,11 +3,11 @@
  * that a security reviewer would flag during audit.
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { toTemporal, toEpochMs } from '../converters.js';
+import { format, parseISO } from '../compat/index.js';
+import { toEpochMs, toTemporal } from '../converters.js';
 import { TemporalAdapterError, TemporalConversionError } from '../errors.js';
 import { clearAdapters, findAdapter, registerAdapter } from '../registry.js';
-import { format, parseISO } from '../compat/index.js';
-import { enableMigrationWarnings, disableMigrationWarnings } from '../warnings.js';
+import { disableMigrationWarnings, enableMigrationWarnings } from '../warnings.js';
 
 afterEach(() => {
   clearAdapters();
@@ -49,7 +49,7 @@ describe('prototype pollution via registerAdapter', () => {
     }
     expect(Object.getPrototypeOf({})).toBe(before);
     // biome-ignore lint/suspicious/noExplicitAny: intentional prototype pollution check
-    expect((({}) as any).polluted).toBeUndefined();
+    expect(({} as any).polluted).toBeUndefined();
   });
 
   it('adapter name "constructor" does not corrupt constructors', () => {
@@ -88,7 +88,7 @@ describe('malicious detect function', () => {
       detect(v: unknown): v is never {
         if (typeof v === 'object' && v !== null) {
           // malicious: try to mutate the value
-          (v as Record<string, unknown>)['_mutated'] = true;
+          (v as Record<string, unknown>)._mutated = true;
         }
         return false;
       },
@@ -121,7 +121,9 @@ describe('toTemporal input validation', () => {
   it('ISO string input does NOT silently parse — must use parseISO', () => {
     // This is intentional: toTemporal does not parse strings.
     // Users must use parseISO or Temporal.ZonedDateTime.from() directly.
-    expect(() => toTemporal('2026-06-20' as unknown as Date, 'UTC')).toThrow(TemporalConversionError);
+    expect(() => toTemporal('2026-06-20' as unknown as Date, 'UTC')).toThrow(
+      TemporalConversionError,
+    );
   });
 
   it('invalid Date (NaN getTime) converts to ZonedDateTime with NaN epoch', () => {
@@ -149,7 +151,7 @@ describe('format security', () => {
 
   it('format string with null bytes does not corrupt output', () => {
     const date = Temporal.PlainDate.from({ year: 2026, month: 6, day: 20 });
-    const result = format(date, "yyyy\x00MM");
+    const result = format(date, 'yyyy\x00MM');
     // \x00 is not a recognized token, it's treated as a literal character
     expect(result).toContain('2026');
     expect(result).toContain('06');
@@ -168,7 +170,7 @@ describe('parseISO security', () => {
   });
 
   it('oversized string throws', () => {
-    const huge = '2026-06-20' + 'X'.repeat(10_000);
+    const huge = `2026-06-20${'X'.repeat(10_000)}`;
     expect(() => parseISO(huge)).toThrow();
   });
 });
@@ -187,22 +189,22 @@ describe('toEpochMs edge cases', () => {
 
 describe('enableMigrationWarnings prod guard', () => {
   it('throws when NODE_ENV=production', () => {
-    const orig = process.env['NODE_ENV'];
-    process.env['NODE_ENV'] = 'production';
+    const orig = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
     try {
       expect(() => enableMigrationWarnings()).toThrow('called in production');
     } finally {
-      process.env['NODE_ENV'] = orig;
+      process.env.NODE_ENV = orig;
     }
   });
 
   it('does not throw when NODE_ENV=development', () => {
-    const orig = process.env['NODE_ENV'];
-    process.env['NODE_ENV'] = 'development';
+    const orig = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
     try {
       expect(() => enableMigrationWarnings()).not.toThrow();
     } finally {
-      process.env['NODE_ENV'] = orig;
+      process.env.NODE_ENV = orig;
       disableMigrationWarnings();
     }
   });

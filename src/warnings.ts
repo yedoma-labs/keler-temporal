@@ -19,7 +19,7 @@ const state: WarningsState = {
 };
 
 export function enableMigrationWarnings(options?: MigrationWarningsOptions): void {
-  if (process.env['NODE_ENV'] === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     throw new Error(
       '[keler-temporal] enableMigrationWarnings() called in production. ' +
         'This is a dev-only migration tool — remove it before shipping.',

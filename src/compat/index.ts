@@ -1,6 +1,6 @@
 import { extractFields, toTemporal } from '../converters.js';
-import { emitMigrationWarning } from '../warnings.js';
 import type { DateTimeFields, TemporalInput } from '../types.js';
+import { emitMigrationWarning } from '../warnings.js';
 
 // ─── internal helpers ────────────────────────────────────────────────────────
 
@@ -8,7 +8,10 @@ function isLegacy(value: unknown): value is Date | number {
   return value instanceof Date || typeof value === 'number';
 }
 
-function normalize(value: TemporalInput | unknown, timezone?: string): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+function normalize(
+  value: TemporalInput | unknown,
+  timezone?: string,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (
     value instanceof Temporal.ZonedDateTime ||
     value instanceof Temporal.PlainDate ||
@@ -138,10 +141,16 @@ export function addDays(date: Temporal.ZonedDateTime, amount: number): Temporal.
 export function addDays(date: Temporal.PlainDate, amount: number): Temporal.PlainDate;
 export function addDays(date: Temporal.PlainDateTime, amount: number): Temporal.PlainDateTime;
 export function addDays(date: Date, amount: number): Temporal.ZonedDateTime;
-export function addDays(date: unknown, amount: number): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function addDays(
+  date: unknown,
+  amount: number,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('addDays', 'date-fns', 'date.add({ days: n })');
   const d = normalize(date);
-  return d.add({ days: amount }) as Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime;
+  return d.add({ days: amount }) as
+    | Temporal.ZonedDateTime
+    | Temporal.PlainDate
+    | Temporal.PlainDateTime;
 }
 
 /**
@@ -151,10 +160,16 @@ export function addMonths(date: Temporal.ZonedDateTime, amount: number): Tempora
 export function addMonths(date: Temporal.PlainDate, amount: number): Temporal.PlainDate;
 export function addMonths(date: Temporal.PlainDateTime, amount: number): Temporal.PlainDateTime;
 export function addMonths(date: Date, amount: number): Temporal.ZonedDateTime;
-export function addMonths(date: unknown, amount: number): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function addMonths(
+  date: unknown,
+  amount: number,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('addMonths', 'date-fns', 'date.add({ months: n })');
   const d = normalize(date);
-  return d.add({ months: amount }) as Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime;
+  return d.add({ months: amount }) as
+    | Temporal.ZonedDateTime
+    | Temporal.PlainDate
+    | Temporal.PlainDateTime;
 }
 
 /**
@@ -164,10 +179,16 @@ export function addYears(date: Temporal.ZonedDateTime, amount: number): Temporal
 export function addYears(date: Temporal.PlainDate, amount: number): Temporal.PlainDate;
 export function addYears(date: Temporal.PlainDateTime, amount: number): Temporal.PlainDateTime;
 export function addYears(date: Date, amount: number): Temporal.ZonedDateTime;
-export function addYears(date: unknown, amount: number): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function addYears(
+  date: unknown,
+  amount: number,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('addYears', 'date-fns', 'date.add({ years: n })');
   const d = normalize(date);
-  return d.add({ years: amount }) as Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime;
+  return d.add({ years: amount }) as
+    | Temporal.ZonedDateTime
+    | Temporal.PlainDate
+    | Temporal.PlainDateTime;
 }
 
 /**
@@ -177,10 +198,16 @@ export function subDays(date: Temporal.ZonedDateTime, amount: number): Temporal.
 export function subDays(date: Temporal.PlainDate, amount: number): Temporal.PlainDate;
 export function subDays(date: Temporal.PlainDateTime, amount: number): Temporal.PlainDateTime;
 export function subDays(date: Date, amount: number): Temporal.ZonedDateTime;
-export function subDays(date: unknown, amount: number): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function subDays(
+  date: unknown,
+  amount: number,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('subDays', 'date-fns', 'date.subtract({ days: n })');
   const d = normalize(date);
-  return d.subtract({ days: amount }) as Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime;
+  return d.subtract({ days: amount }) as
+    | Temporal.ZonedDateTime
+    | Temporal.PlainDate
+    | Temporal.PlainDateTime;
 }
 
 /**
@@ -190,10 +217,16 @@ export function subMonths(date: Temporal.ZonedDateTime, amount: number): Tempora
 export function subMonths(date: Temporal.PlainDate, amount: number): Temporal.PlainDate;
 export function subMonths(date: Temporal.PlainDateTime, amount: number): Temporal.PlainDateTime;
 export function subMonths(date: Date, amount: number): Temporal.ZonedDateTime;
-export function subMonths(date: unknown, amount: number): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function subMonths(
+  date: unknown,
+  amount: number,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('subMonths', 'date-fns', 'date.subtract({ months: n })');
   const d = normalize(date);
-  return d.subtract({ months: amount }) as Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime;
+  return d.subtract({ months: amount }) as
+    | Temporal.ZonedDateTime
+    | Temporal.PlainDate
+    | Temporal.PlainDateTime;
 }
 
 /**
@@ -239,13 +272,22 @@ export function startOfDay(date: Temporal.ZonedDateTime): Temporal.ZonedDateTime
 export function startOfDay(date: Temporal.PlainDate): Temporal.PlainDate;
 export function startOfDay(date: Temporal.PlainDateTime): Temporal.PlainDateTime;
 export function startOfDay(date: Date): Temporal.ZonedDateTime;
-export function startOfDay(date: unknown): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function startOfDay(
+  date: unknown,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('startOfDay', 'date-fns', 'zdt.startOfDay()');
 
   if (date instanceof Temporal.PlainDate) return date;
   if (date instanceof Temporal.ZonedDateTime) return date.startOfDay();
   if (date instanceof Temporal.PlainDateTime) {
-    return date.with({ hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0, nanosecond: 0 });
+    return date.with({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+      nanosecond: 0,
+    });
   }
   return toZDT(date).startOfDay();
 }
@@ -260,7 +302,14 @@ export function endOfDay(date: unknown): Temporal.ZonedDateTime | Temporal.Plain
     return date.startOfDay().add({ days: 1 }).subtract({ nanoseconds: 1 });
   }
   if (date instanceof Temporal.PlainDateTime) {
-    return date.with({ hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 999, nanosecond: 999 });
+    return date.with({
+      hour: 23,
+      minute: 59,
+      second: 59,
+      millisecond: 999,
+      microsecond: 999,
+      nanosecond: 999,
+    });
   }
   return toZDT(date).startOfDay().add({ days: 1 }).subtract({ nanoseconds: 1 });
 }
@@ -272,7 +321,9 @@ export function startOfMonth(date: Temporal.ZonedDateTime): Temporal.ZonedDateTi
 export function startOfMonth(date: Temporal.PlainDate): Temporal.PlainDate;
 export function startOfMonth(date: Temporal.PlainDateTime): Temporal.PlainDateTime;
 export function startOfMonth(date: Date): Temporal.ZonedDateTime;
-export function startOfMonth(date: unknown): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+export function startOfMonth(
+  date: unknown,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   if (isLegacy(date)) emitMigrationWarning('startOfMonth', 'date-fns', 'date.with({ day: 1 })');
   const d = normalize(date);
   if (d instanceof Temporal.ZonedDateTime) return d.with({ day: 1 }).startOfDay();
@@ -286,17 +337,29 @@ export function endOfMonth(date: Temporal.ZonedDateTime): Temporal.ZonedDateTime
 export function endOfMonth(date: Temporal.PlainDate): Temporal.PlainDate;
 export function endOfMonth(date: Temporal.PlainDateTime): Temporal.PlainDateTime;
 export function endOfMonth(date: Date): Temporal.ZonedDateTime;
-export function endOfMonth(date: unknown): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
-  if (isLegacy(date)) emitMigrationWarning('endOfMonth', 'date-fns', 'date.with({ day: date.daysInMonth })');
+export function endOfMonth(
+  date: unknown,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+  if (isLegacy(date))
+    emitMigrationWarning('endOfMonth', 'date-fns', 'date.with({ day: date.daysInMonth })');
   const d = normalize(date);
-  return d.with({ day: d.daysInMonth }) as Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime;
+  return d.with({ day: d.daysInMonth }) as
+    | Temporal.ZonedDateTime
+    | Temporal.PlainDate
+    | Temporal.PlainDateTime;
 }
 
 /**
  * @deprecated Bridge function. Prefer: `Temporal.PlainDate.from(isoString)` or `Temporal.ZonedDateTime.from(isoString)`
  */
-export function parseISO(isoString: string): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
-  emitMigrationWarning('parseISO', 'date-fns', 'Temporal.ZonedDateTime.from(str) or Temporal.PlainDate.from(str)');
+export function parseISO(
+  isoString: string,
+): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+  emitMigrationWarning(
+    'parseISO',
+    'date-fns',
+    'Temporal.ZonedDateTime.from(str) or Temporal.PlainDate.from(str)',
+  );
 
   // ZonedDateTime: bracket [Timezone] is the unambiguous marker
   if (isoString.includes('[')) {
@@ -336,7 +399,11 @@ export function isValid(date: unknown): boolean {
  */
 export function differenceInDays(dateLeft: unknown, dateRight: unknown): number {
   if (isLegacy(dateLeft) || isLegacy(dateRight)) {
-    emitMigrationWarning('differenceInDays', 'date-fns', 'Temporal.ZonedDateTime.compare or .until()');
+    emitMigrationWarning(
+      'differenceInDays',
+      'date-fns',
+      'Temporal.ZonedDateTime.compare or .until()',
+    );
   }
   const a = toZDT(dateLeft);
   const b = toZDT(dateRight);
@@ -348,7 +415,11 @@ export function differenceInDays(dateLeft: unknown, dateRight: unknown): number 
  */
 export function differenceInMonths(dateLeft: unknown, dateRight: unknown): number {
   if (isLegacy(dateLeft) || isLegacy(dateRight)) {
-    emitMigrationWarning('differenceInMonths', 'date-fns', "a.until(b, { largestUnit: 'months' }).months");
+    emitMigrationWarning(
+      'differenceInMonths',
+      'date-fns',
+      "a.until(b, { largestUnit: 'months' }).months",
+    );
   }
   const a = toZDT(dateLeft);
   const b = toZDT(dateRight);

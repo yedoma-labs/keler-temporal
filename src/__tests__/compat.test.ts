@@ -141,7 +141,7 @@ describe('format', () => {
   });
 
   describe('quoted literals', () => {
-    it("preserves text in single quotes", () => {
+    it('preserves text in single quotes', () => {
       expect(format(date, "'Today is' yyyy-MM-dd")).toBe('Today is 2026-06-20');
     });
 

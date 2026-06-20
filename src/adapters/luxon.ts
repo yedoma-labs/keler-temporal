@@ -15,7 +15,7 @@ export const luxonAdapter: TemporalAdapter<LuxonDateTimeLike> = {
     return (
       typeof value === 'object' &&
       value !== null &&
-      (value as Record<string, unknown>)['isLuxonDateTime'] === true
+      (value as Record<string, unknown>).isLuxonDateTime === true
     );
   },
 

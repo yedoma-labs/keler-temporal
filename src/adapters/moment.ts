@@ -16,7 +16,7 @@ export const momentAdapter: TemporalAdapter<MomentLike> = {
     return (
       typeof value === 'object' &&
       value !== null &&
-      (value as Record<string, unknown>)['_isAMomentObject'] === true
+      (value as Record<string, unknown>)._isAMomentObject === true
     );
   },
 
@@ -26,9 +26,13 @@ export const momentAdapter: TemporalAdapter<MomentLike> = {
 
   getTimezone(value: MomentLike): string | undefined {
     // moment-timezone sets _z.name; plain moment has no zone
-    const tz = (value as unknown as Record<string, unknown>)['_z'];
-    if (typeof tz === 'object' && tz !== null && typeof (tz as Record<string, unknown>)['name'] === 'string') {
-      return (tz as Record<string, string>)['name'];
+    const tz = (value as unknown as Record<string, unknown>)._z;
+    if (
+      typeof tz === 'object' &&
+      tz !== null &&
+      typeof (tz as Record<string, unknown>).name === 'string'
+    ) {
+      return (tz as Record<string, string>).name;
     }
     return undefined;
   },

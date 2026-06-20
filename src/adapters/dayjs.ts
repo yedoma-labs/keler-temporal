@@ -14,7 +14,7 @@ export const dayjsAdapter: TemporalAdapter<DayjsLike> = {
     return (
       typeof value === 'object' &&
       value !== null &&
-      (value as Record<string, unknown>)['$isDayjsObject'] === true
+      (value as Record<string, unknown>).$isDayjsObject === true
     );
   },
 
@@ -24,9 +24,9 @@ export const dayjsAdapter: TemporalAdapter<DayjsLike> = {
 
   getTimezone(_value: DayjsLike): string | undefined {
     // dayjs-timezone plugin exposes $x.$timezone
-    const x = (_value as unknown as Record<string, unknown>)['$x'];
+    const x = (_value as unknown as Record<string, unknown>).$x;
     if (typeof x === 'object' && x !== null) {
-      const tz = (x as Record<string, unknown>)['$timezone'];
+      const tz = (x as Record<string, unknown>).$timezone;
       if (typeof tz === 'string') return tz;
     }
     return undefined;

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { extractFields, fromTemporal, isTemporalType, toEpochMs, toTemporal } from '../converters.js';
+import {
+  extractFields,
+  fromTemporal,
+  isTemporalType,
+  toEpochMs,
+  toTemporal,
+} from '../converters.js';
 import { TemporalConversionError, TemporalNotAvailableError } from '../errors.js';
 
 const TZ = 'Europe/Berlin';
@@ -36,7 +42,13 @@ describe('toTemporal', () => {
 
   describe('PlainDateTime + timezone → ZonedDateTime', () => {
     it('converts PlainDateTime to ZonedDateTime with given timezone', () => {
-      const pdt = Temporal.PlainDateTime.from({ year: 2026, month: 6, day: 20, hour: 14, minute: 30 });
+      const pdt = Temporal.PlainDateTime.from({
+        year: 2026,
+        month: 6,
+        day: 20,
+        hour: 14,
+        minute: 30,
+      });
       const result = toTemporal(pdt, TZ);
       expect(result).toBeInstanceOf(Temporal.ZonedDateTime);
       expect(result.timeZoneId).toBe(TZ);
@@ -45,7 +57,13 @@ describe('toTemporal', () => {
 
     it('uses disambiguation option for DST-ambiguous wall-clock time', () => {
       // Nov 1 2026 01:30 America/New_York exists twice (fall-back DST)
-      const ambiguous = Temporal.PlainDateTime.from({ year: 2026, month: 11, day: 1, hour: 1, minute: 30 });
+      const ambiguous = Temporal.PlainDateTime.from({
+        year: 2026,
+        month: 11,
+        day: 1,
+        hour: 1,
+        minute: 30,
+      });
 
       const earlier = toTemporal(ambiguous, TZ_NY, { disambiguation: 'earlier' });
       const later = toTemporal(ambiguous, TZ_NY, { disambiguation: 'later' });
@@ -100,9 +118,9 @@ describe('toTemporal', () => {
     });
 
     it('throws without timezone for Date', () => {
-      expect(() => (toTemporal as (v: unknown, tz?: string) => unknown)(new Date(), undefined)).toThrow(
-        TemporalConversionError,
-      );
+      expect(() =>
+        (toTemporal as (v: unknown, tz?: string) => unknown)(new Date(), undefined),
+      ).toThrow(TemporalConversionError);
     });
 
     it('handles Date at Unix epoch (0)', () => {
@@ -132,9 +150,9 @@ describe('toTemporal', () => {
     });
 
     it('throws without timezone for number', () => {
-      expect(() => (toTemporal as (v: unknown, tz?: string) => unknown)(EPOCH_MS, undefined)).toThrow(
-        TemporalConversionError,
-      );
+      expect(() =>
+        (toTemporal as (v: unknown, tz?: string) => unknown)(EPOCH_MS, undefined),
+      ).toThrow(TemporalConversionError);
     });
 
     it('handles negative epoch (before 1970)', () => {
