@@ -48,8 +48,7 @@ describe('prototype pollution via registerAdapter', () => {
       // may throw; that's fine
     }
     expect(Object.getPrototypeOf({})).toBe(before);
-    // biome-ignore lint/suspicious/noExplicitAny: intentional prototype pollution check
-    expect(({} as any).polluted).toBeUndefined();
+    expect((Object.create(null) as Record<string, unknown>).polluted).toBeUndefined();
   });
 
   it('adapter name "constructor" does not corrupt constructors', () => {

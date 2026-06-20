@@ -84,7 +84,7 @@ function applyFormatString(fmt: string, f: DateTimeFields): string {
   let i = 0;
 
   while (i < fmt.length) {
-    const c = fmt[i]!;
+    const c = fmt[i] ?? '';
 
     if (c === "'") {
       i++;

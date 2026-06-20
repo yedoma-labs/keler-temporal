@@ -105,8 +105,11 @@ export function makeZonedDateTime(
   timezone?: string,
 ): Temporal.ZonedDateTime {
   if (typeof isoOrFields === 'string') {
-    const tz = timezone!;
-    return Temporal.PlainDateTime.from(isoOrFields).toZonedDateTime(tz);
+    if (!timezone)
+      throw new Error(
+        '[keler-temporal] makeZonedDateTime: timezone required when passing an ISO string',
+      );
+    return Temporal.PlainDateTime.from(isoOrFields).toZonedDateTime(timezone);
   }
   const f = isoOrFields;
   return Temporal.PlainDateTime.from({
