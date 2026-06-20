@@ -1,5 +1,15 @@
 # @yedoma-labs/keler-temporal
 
+<picture>
+  <source media="(max-width: 640px)" srcset="https://raw.githubusercontent.com/yedoma-labs/assets/main/resized/banner-resized-mobile.png">
+  <img src="https://raw.githubusercontent.com/yedoma-labs/assets/main/resized/banner-resized.png" alt="Project Header">
+</picture>
+
+[![CI](https://github.com/yedoma-labs/keler-temporal/actions/workflows/ci.yml/badge.svg)](https://github.com/yedoma-labs/keler-temporal/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@yedoma-labs/keler-temporal.svg)](https://www.npmjs.com/package/@yedoma-labs/keler-temporal)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-blue.svg)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > **кэлэр** (Yakutian/Sakha) — _coming, future_
 
 Bridge library for gradual migration from legacy date libraries (date-fns, moment.js, Luxon, Day.js) to the [TC39 Temporal API](https://tc39.es/proposal-temporal/).
