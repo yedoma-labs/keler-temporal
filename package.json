@@ -1,0 +1,131 @@
+{
+  "name": "@yedoma-labs/keler-temporal",
+  "version": "0.1.0",
+  "description": "Bridge library for gradual migration from legacy date libs to the TC39 Temporal API — one function at a time",
+  "type": "module",
+  "sideEffects": false,
+  "author": "yedoma-labs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yedoma-labs/keler-temporal"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@11.7.0",
+  "keywords": [
+    "temporal",
+    "tc39",
+    "date",
+    "date-fns",
+    "moment",
+    "luxon",
+    "dayjs",
+    "migration",
+    "bridge",
+    "typescript"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run --reporter=verbose",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check src",
+    "lint:fix": "biome check src --write",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build && pnpm run typecheck"
+  },
+  "peerDependencies": {
+    "temporal-polyfill": ">=0.2.0"
+  },
+  "peerDependenciesMeta": {
+    "temporal-polyfill": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.0",
+    "@types/node": "^26.0.0",
+    "@vitest/coverage-v8": "^4.1.9",
+    "simple-git-hooks": "^2.13.1",
+    "temporal-polyfill": "^1.0.1",
+    "tsx": "^4.22.4",
+    "typescript": "6.0.3",
+    "vite": "^8.0.16",
+    "vite-plugin-dts": "^5.0.2",
+    "vitest": "^4.1.9"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./compat": {
+      "import": {
+        "types": "./dist/compat/index.d.ts",
+        "default": "./dist/compat/index.js"
+      },
+      "require": {
+        "types": "./dist/compat/index.d.cts",
+        "default": "./dist/compat/index.cjs"
+      }
+    },
+    "./testing": {
+      "import": {
+        "types": "./dist/testing/index.d.ts",
+        "default": "./dist/testing/index.js"
+      },
+      "require": {
+        "types": "./dist/testing/index.d.cts",
+        "default": "./dist/testing/index.cjs"
+      }
+    },
+    "./adapters/moment": {
+      "import": {
+        "types": "./dist/adapters/moment.d.ts",
+        "default": "./dist/adapters/moment.js"
+      },
+      "require": {
+        "types": "./dist/adapters/moment.d.cts",
+        "default": "./dist/adapters/moment.cjs"
+      }
+    },
+    "./adapters/luxon": {
+      "import": {
+        "types": "./dist/adapters/luxon.d.ts",
+        "default": "./dist/adapters/luxon.js"
+      },
+      "require": {
+        "types": "./dist/adapters/luxon.d.cts",
+        "default": "./dist/adapters/luxon.cjs"
+      }
+    },
+    "./adapters/dayjs": {
+      "import": {
+        "types": "./dist/adapters/dayjs.d.ts",
+        "default": "./dist/adapters/dayjs.js"
+      },
+      "require": {
+        "types": "./dist/adapters/dayjs.d.cts",
+        "default": "./dist/adapters/dayjs.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "simple-git-hooks": {
+    "pre-push": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
+  }
+}
