@@ -1,6 +1,6 @@
 import { TemporalConversionError, TemporalNotAvailableError } from './errors.js';
 import { findAdapter } from './registry.js';
-import type { DateTimeFields, DisambiguationOption, ToTemporalOptions } from './types.js';
+import type { DateTimeFields, ToTemporalOptions } from './types.js';
 
 function assertTemporalAvailable(): void {
   if (typeof globalThis.Temporal === 'undefined') {
@@ -36,33 +36,67 @@ function disambiguationFor(
 
 // ─── toTemporal overloads ────────────────────────────────────────────────────
 
+// Temporal pass-through
 export function toTemporal(value: Temporal.ZonedDateTime): Temporal.ZonedDateTime;
 export function toTemporal(value: Temporal.PlainDate): Temporal.PlainDate;
-export function toTemporal(value: Temporal.PlainDateTime): Temporal.PlainDateTime;
-export function toTemporal(value: Temporal.Instant): Temporal.Instant;
 export function toTemporal(value: Temporal.PlainTime): Temporal.PlainTime;
+
+// PlainDateTime + timezone → ZonedDateTime (disambiguation applies here)
+export function toTemporal(
+  value: Temporal.PlainDateTime,
+  timezone: string,
+  options?: ToTemporalOptions,
+): Temporal.ZonedDateTime;
+// PlainDateTime without timezone → pass through
+export function toTemporal(value: Temporal.PlainDateTime): Temporal.PlainDateTime;
+
+// Instant + timezone → ZonedDateTime
+export function toTemporal(value: Temporal.Instant, timezone: string): Temporal.ZonedDateTime;
+// Instant without timezone → pass through
+export function toTemporal(value: Temporal.Instant): Temporal.Instant;
+
+// Legacy types always require timezone
 export function toTemporal(
   value: Date | number,
   timezone: string,
   options?: ToTemporalOptions,
 ): Temporal.ZonedDateTime;
+
+// Adapter catch-all
 export function toTemporal(
   value: unknown,
   timezone: string,
   options?: ToTemporalOptions,
 ): Temporal.ZonedDateTime;
+
 export function toTemporal(
   value: unknown,
   timezone?: string,
   options?: ToTemporalOptions,
-): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime | Temporal.Instant | Temporal.PlainTime {
+):
+  | Temporal.ZonedDateTime
+  | Temporal.PlainDate
+  | Temporal.PlainDateTime
+  | Temporal.Instant
+  | Temporal.PlainTime {
   assertTemporalAvailable();
 
   if (isTemporalZonedDateTime(value)) return value;
   if (isTemporalPlainDate(value)) return value;
-  if (isTemporalPlainDateTime(value)) return value;
-  if (isTemporalInstant(value)) return value;
   if (isTemporalPlainTime(value)) return value;
+
+  if (isTemporalPlainDateTime(value)) {
+    // With timezone: convert and apply disambiguation for DST-ambiguous wall-clock times
+    if (timezone) {
+      return value.toZonedDateTime(timezone, { disambiguation: disambiguationFor(options) });
+    }
+    return value;
+  }
+
+  if (isTemporalInstant(value)) {
+    if (timezone) return value.toZonedDateTimeISO(timezone);
+    return value;
+  }
 
   if (value instanceof Date) {
     if (!timezone) {
@@ -102,33 +136,39 @@ export function toTemporal(
 
 // ─── fromTemporal ───────────────────────────────────────────────────────────
 
+export interface FromTemporalOptions {
+  /**
+   * PlainDateTime-as-UTC conversion is lossy for non-UTC consumers.
+   * Pass this explicitly to acknowledge the behaviour.
+   */
+  plainDateTimeAsUTC?: boolean;
+}
+
 export function fromTemporal(
   value: Temporal.ZonedDateTime | Temporal.Instant | Temporal.PlainDateTime,
-  options?: { truncateTo?: 'ms' },
+  _options?: FromTemporalOptions,
 ): Date {
   assertTemporalAvailable();
 
-  let epochMs: number;
-
+  // NOTE: Temporal supports nanosecond precision; Date only supports milliseconds.
+  // Sub-millisecond values are silently truncated.
   if (isTemporalInstant(value)) {
-    epochMs = Number(value.epochMilliseconds);
-  } else if (isTemporalZonedDateTime(value)) {
-    epochMs = Number(value.epochMilliseconds);
-  } else if (isTemporalPlainDateTime(value)) {
-    // PlainDateTime has no timezone — treat as UTC
-    epochMs = Number(value.toZonedDateTime('UTC').epochMilliseconds);
-  } else {
-    throw new TemporalConversionError(
-      'fromTemporal only accepts ZonedDateTime, Instant, or PlainDateTime. ' +
-        'PlainDate and PlainTime have no epoch equivalent.',
-    );
+    return new Date(Number(value.epochMilliseconds));
+  }
+  if (isTemporalZonedDateTime(value)) {
+    return new Date(Number(value.epochMilliseconds));
+  }
+  if (isTemporalPlainDateTime(value)) {
+    // PlainDateTime carries no timezone; we treat it as UTC here.
+    // This matches the behaviour of `new Date('2026-06-20T14:30:00')` in most runtimes.
+    return new Date(Number(value.toZonedDateTime('UTC').epochMilliseconds));
   }
 
-  if (options?.truncateTo === 'ms' || options === undefined) {
-    return new Date(epochMs);
-  }
-
-  return new Date(epochMs);
+  // TypeScript types prevent reaching here, but guard for JS callers
+  throw new TemporalConversionError(
+    'fromTemporal only accepts ZonedDateTime, Instant, or PlainDateTime. ' +
+      'PlainDate and PlainTime have no epoch equivalent.',
+  );
 }
 
 // ─── toEpochMs ──────────────────────────────────────────────────────────────
@@ -197,23 +237,17 @@ export function extractFields(value: unknown, timezone?: string): DateTimeFields
   }
 
   if (isTemporalInstant(value)) {
-    const tz = timezone ?? 'UTC';
-    const zdt = value.toZonedDateTimeISO(tz);
-    return extractFields(zdt);
+    return extractFields(value.toZonedDateTimeISO(timezone ?? 'UTC'));
   }
 
-  // Legacy Date / number / adapter
   if (value instanceof Date || typeof value === 'number') {
-    const tz = timezone ?? 'UTC';
-    const zdt = toTemporal(value, tz);
-    return extractFields(zdt);
+    return extractFields(toTemporal(value, timezone ?? 'UTC'));
   }
 
   const adapter = findAdapter(value);
   if (adapter) {
     const tz = timezone ?? adapter.getTimezone?.(value) ?? 'UTC';
-    const zdt = toTemporal(value, tz);
-    return extractFields(zdt);
+    return extractFields(toTemporal(value, tz));
   }
 
   throw new TemporalConversionError(`Cannot extract fields from value of type "${typeof value}"`);
@@ -221,7 +255,14 @@ export function extractFields(value: unknown, timezone?: string): DateTimeFields
 
 // ─── isTemporalType guard ────────────────────────────────────────────────────
 
-export function isTemporalType(value: unknown): value is Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime | Temporal.Instant | Temporal.PlainTime {
+export function isTemporalType(
+  value: unknown,
+): value is
+  | Temporal.ZonedDateTime
+  | Temporal.PlainDate
+  | Temporal.PlainDateTime
+  | Temporal.Instant
+  | Temporal.PlainTime {
   if (typeof globalThis.Temporal === 'undefined') return false;
   return (
     value instanceof Temporal.ZonedDateTime ||
@@ -231,8 +272,3 @@ export function isTemporalType(value: unknown): value is Temporal.ZonedDateTime 
     value instanceof Temporal.PlainTime
   );
 }
-
-// ─── disambiguationFor re-export for compat ─────────────────────────────────
-
-export { disambiguationFor };
-export type { DisambiguationOption };

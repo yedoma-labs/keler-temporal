@@ -1,4 +1,11 @@
-export { extractFields, fromTemporal, isTemporalType, toEpochMs, toTemporal } from './converters.js';
+export {
+  extractFields,
+  fromTemporal,
+  isTemporalType,
+  toEpochMs,
+  toTemporal,
+} from './converters.js';
+export type { FromTemporalOptions } from './converters.js';
 export {
   TemporalAdapterError,
   TemporalConversionError,
