@@ -15,8 +15,9 @@ export default defineConfig({
   plugins: [
     dts({
       include: ['src/**/*'],
-      outDir: 'dist',
-      rollupTypes: false,
+      exclude: ['src/**/__tests__/**'],
+      outDirs: ['dist', { dir: 'dist', moduleFormat: 'cjs' }],
+      entryRoot: 'src',
     }),
   ],
   build: {

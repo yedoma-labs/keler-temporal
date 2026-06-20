@@ -1,6 +1,6 @@
 {
   "name": "@yedoma-labs/keler-temporal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bridge library for gradual migration from legacy date libs to the TC39 Temporal API — one function at a time",
   "type": "module",
   "sideEffects": false,
@@ -27,7 +27,7 @@
     "typescript"
   ],
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && node -e \"const{cpSync,rmSync}=require('node:fs');cpSync('dist/src','dist',{recursive:true});rmSync('dist/src',{recursive:true})\"",
     "dev": "vite build --watch",
     "test": "vitest run --reporter=verbose",
     "test:watch": "vitest",

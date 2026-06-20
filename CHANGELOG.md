@@ -2,6 +2,14 @@
 
 All notable changes will be documented here. Follows [Conventional Commits](https://www.conventionalcommits.org/).
 
+## 0.1.1 (2026-06-20)
+
+### Fixes
+
+- **Build**: vite-plugin-dts v5 uses `unplugin-dts` under the hood; old `outDir` option was silently ignored, causing declaration files to land in `dist/src/` instead of `dist/`. Fixed by switching to the correct `outDirs` option and adding a postbuild step that promotes `dist/src/*` → `dist/`.
+- **Build**: added `exclude: ['src/**/__tests__/**']` to dts config to keep test declaration stubs out of the published package.
+- **gitignore**: added `*.tgz` to prevent accidental commit of local tarballs.
+
 ## 0.1.0 (2026-06-20)
 
 Initial release.
