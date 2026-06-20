@@ -18,11 +18,7 @@ export default defineConfig({
       exclude: ['src/**/__tests__/**'],
       outDirs: ['dist', { dir: 'dist', moduleFormat: 'cjs' }],
       entryRoot: resolve(__dirname, 'src'),
-      beforeWriteFile(filePath, content) {
-        const fixed = filePath.replace('/dist/src/', '/dist/');
-        if (fixed !== filePath) console.log('[dts] path fix:', filePath, '->', fixed);
-        return { filePath: fixed, content };
-      },
+      compilerOptions: { rootDir: resolve(__dirname, 'src') },
     }),
   ],
   build: {
