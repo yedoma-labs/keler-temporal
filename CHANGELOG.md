@@ -1,3 +1,10 @@
+## [0.1.3](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.2...v0.1.3) (2026-10-10)
+
+
+### Bug Fixes
+
+* **deps:** override vulnerable transitive dependencies ([#3](https://github.com/yedoma-labs/keler-temporal/issues/3)) ([836bbb9](https://github.com/yedoma-labs/keler-temporal/commit/836bbb91ac6a2d6b143033e4291ead07af5119bc))
+
 ## [0.1.2](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.1...v0.1.2) (2026-10-10)
 
 
