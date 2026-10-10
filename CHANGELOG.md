@@ -1,3 +1,11 @@
+## [0.1.2](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.1...v0.1.2) (2026-10-10)
+
+
+### Bug Fixes
+
+* **build:** use beforeWriteFile hook instead of postbuild shell step ([96846f8](https://github.com/yedoma-labs/keler-temporal/commit/96846f8f0abb15b876ed68e995beb06d5c95707d))
+* **build:** use compilerOptions.rootDir instead of beforeWriteFile path rewrite ([19aefab](https://github.com/yedoma-labs/keler-temporal/commit/19aefab2f5550fe16181d2abfb5d3a96ec4c4e01))
+
 # Changelog
 
 All notable changes will be documented here. Follows [Conventional Commits](https://www.conventionalcommits.org/).
