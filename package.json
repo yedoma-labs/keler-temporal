@@ -47,8 +47,18 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.0",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^11.0.1",
+    "@semantic-release/github": "^12.0.10",
+    "@semantic-release/npm": "^13.2.0",
+    "@semantic-release/release-notes-generator": "^14.1.1",
     "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.1.9",
+    "semantic-release": "^25.0.9",
     "simple-git-hooks": "^2.13.1",
     "temporal-polyfill": "^1.0.1",
     "tsx": "^4.22.4",
@@ -126,6 +136,7 @@
     "dist"
   ],
   "simple-git-hooks": {
-    "pre-push": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
+    "pre-push": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build",
+    "commit-msg": "pnpm exec commitlint --edit $1"
   }
 }
