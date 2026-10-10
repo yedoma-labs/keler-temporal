@@ -3,3 +3,8 @@ packages:
 allowBuilds:
   esbuild: true
   simple-git-hooks: true
+overrides:
+  'postcss': '>=8.5.23'
+  'source-map-js': '>=1.2.2'
+  'vitest': '>=4.1.11'
+  '@vitest/mocker': '>=4.1.11'
