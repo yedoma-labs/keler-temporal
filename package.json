@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=22.0.0"
   },
-  "packageManager": "pnpm@11.7.0",
+  "packageManager": "pnpm@12.14.0",
   "keywords": [
     "temporal",
     "tc39",
@@ -58,15 +58,15 @@
     "@semantic-release/release-notes-generator": "^14.1.1",
     "@types/node": "^26.6.5",
     "@typescript/typescript6": "^6.0.2",
-    "@vitest/coverage-v8": "^5.0.3",
+    "@vitest/coverage-v8": "^5.0.5",
     "semantic-release": "^25.0.9",
     "simple-git-hooks": "^2.14.0",
-    "temporal-polyfill": "^1.0.5",
+    "temporal-polyfill": "^1.0.6",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "vite": "^8.3.4",
     "vite-plugin-dts": "^5.1.2",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.5"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
