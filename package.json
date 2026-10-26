@@ -1,6 +1,6 @@
 {
   "name": "@yedoma-labs/keler-temporal",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Bridge library for gradual migration from legacy date libs to the TC39 Temporal API — one function at a time",
   "type": "module",
   "sideEffects": false,

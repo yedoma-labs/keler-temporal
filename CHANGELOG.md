@@ -1,3 +1,10 @@
+## [0.1.4](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.3...v0.1.4) (2026-10-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies to latest ([#11](https://github.com/yedoma-labs/keler-temporal/issues/11)) ([d1f9aef](https://github.com/yedoma-labs/keler-temporal/commit/d1f9aefe111bf14377790452d3d7973d12ea07a8))
+
 ## [0.1.3](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.2...v0.1.3) (2026-10-10)
 
 
