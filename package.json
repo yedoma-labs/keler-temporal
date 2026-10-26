@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=22.0.0"
   },
-  "packageManager": "pnpm@12.14.0",
+  "packageManager": "pnpm@12.15.0",
   "keywords": [
     "temporal",
     "tc39",
@@ -46,9 +46,9 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
-    "@commitlint/cli": "^21.2.3",
-    "@commitlint/config-conventional": "^21.2.3",
+    "@biomejs/biome": "^2.6.3",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.1.0",
@@ -64,7 +64,7 @@
     "temporal-polyfill": "^1.0.6",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
-    "vite": "^8.3.4",
+    "vite": "^8.3.5",
     "vite-plugin-dts": "^5.1.2",
     "vitest": "^5.0.5"
   },
