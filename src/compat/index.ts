@@ -24,7 +24,8 @@ function normalize(
 }
 
 function fields(value: TemporalInput | unknown, timezone?: string): DateTimeFields {
-  return extractFields(value, timezone);
+  // Legacy Date/number values are projected into the system zone, matching date-fns.
+  return extractFields(value, timezone ?? Temporal.Now.timeZoneId());
 }
 
 function toZDT(value: TemporalInput | unknown, timezone?: string): Temporal.ZonedDateTime {

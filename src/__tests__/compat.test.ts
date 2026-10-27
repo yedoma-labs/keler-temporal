@@ -396,3 +396,49 @@ describe('differenceInMonths', () => {
     expect(differenceInMonths(a, b)).toBe(12);
   });
 });
+
+// Legacy Date values are interpreted in the system timezone, like date-fns does.
+// process.env.TZ can be changed at runtime in Node, so these tests pin the zone explicitly.
+function withTimeZone(tz: string, fn: () => void): void {
+  const previous = process.env.TZ;
+  process.env.TZ = tz;
+  try {
+    fn();
+  } finally {
+    if (previous === undefined) delete process.env.TZ;
+    else process.env.TZ = previous;
+  }
+}
+
+describe('legacy Date uses the system timezone (date-fns parity)', () => {
+  it('format() renders the local wall clock, not UTC', () => {
+    withTimeZone('Asia/Tokyo', () => {
+      // 23:30 UTC on June 20 is 08:30 on June 21 in Tokyo
+      const d = new Date('2026-06-20T23:30:00Z');
+      expect(format(d, 'yyyy-MM-dd HH:mm')).toBe('2026-06-21 08:30');
+    });
+  });
+
+  it('format() agrees with native Date local getters in the current zone', () => {
+    const d = new Date(2026, 5, 20, 7, 5, 9);
+    expect(format(d, 'yyyy-MM-dd HH:mm:ss')).toBe('2026-06-20 07:05:09');
+    expect(format(d, 'HH')).toBe(String(d.getHours()).padStart(2, '0'));
+  });
+
+  it('isSameDay() compares local calendar days', () => {
+    withTimeZone('America/New_York', () => {
+      // 02:00 UTC on June 21 is 22:00 on June 20 in New York
+      const a = new Date('2026-06-21T02:00:00Z');
+      const b = new Date('2026-06-20T12:00:00-04:00');
+      expect(isSameDay(a, b)).toBe(true);
+    });
+  });
+
+  it('startOfDay() and format() agree on the day for the same Date', () => {
+    withTimeZone('Asia/Tokyo', () => {
+      const d = new Date('2026-06-20T23:30:00Z');
+      const day = startOfDay(d) as Temporal.ZonedDateTime;
+      expect(format(d, 'yyyy-MM-dd')).toBe(format(day, 'yyyy-MM-dd'));
+    });
+  });
+});
