@@ -442,3 +442,41 @@ describe('legacy Date uses the system timezone (date-fns parity)', () => {
     });
   });
 });
+
+describe('parseISO with Z or UTC offset', () => {
+  it('Z suffix returns an Instant with the same epoch ms as Date.parse', () => {
+    const result = parseISO('2026-06-20T14:30:00Z');
+    expect(result).toBeInstanceOf(Temporal.Instant);
+    expect(Number((result as Temporal.Instant).epochMilliseconds)).toBe(
+      Date.parse('2026-06-20T14:30:00Z'),
+    );
+  });
+
+  it('numeric offset is applied, not dropped', () => {
+    const result = parseISO('2026-06-20T14:30:00+02:00') as Temporal.Instant;
+    expect(result).toBeInstanceOf(Temporal.Instant);
+    expect(Number(result.epochMilliseconds)).toBe(Date.parse('2026-06-20T12:30:00Z'));
+  });
+
+  it('negative offset with fractional seconds', () => {
+    const result = parseISO('2026-06-20T14:30:00.250-05:00') as Temporal.Instant;
+    expect(Number(result.epochMilliseconds)).toBe(Date.parse('2026-06-20T19:30:00.250Z'));
+  });
+
+  it('offset without colon is accepted', () => {
+    const result = parseISO('2026-06-20T14:30:00+0200') as Temporal.Instant;
+    expect(Number(result.epochMilliseconds)).toBe(Date.parse('2026-06-20T12:30:00Z'));
+  });
+
+  it('time without offset still yields PlainDateTime', () => {
+    expect(parseISO('2026-06-20T14:30:00')).toBeInstanceOf(Temporal.PlainDateTime);
+  });
+
+  it('date-only string is not mistaken for an offset', () => {
+    expect(parseISO('2026-06-20')).toBeInstanceOf(Temporal.PlainDate);
+  });
+
+  it('invalid offset throws', () => {
+    expect(() => parseISO('2026-06-20T14:30:00+99:00')).toThrow();
+  });
+});

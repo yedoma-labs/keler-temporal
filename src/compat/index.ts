@@ -350,12 +350,15 @@ export function endOfMonth(
     | Temporal.PlainDateTime;
 }
 
+// Trailing 'Z' or ±HH[:MM] — only meaningful after a time component.
+const UTC_OFFSET_SUFFIX = /(?:[Zz]|[+-]\d{2}(?::?\d{2})?)$/;
+
 /**
  * @deprecated Bridge function. Prefer: `Temporal.PlainDate.from(isoString)` or `Temporal.ZonedDateTime.from(isoString)`
  */
 export function parseISO(
   isoString: string,
-): Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
+): Temporal.Instant | Temporal.ZonedDateTime | Temporal.PlainDate | Temporal.PlainDateTime {
   emitMigrationWarning(
     'parseISO',
     'date-fns',
@@ -369,6 +372,11 @@ export function parseISO(
 
   // PlainDateTime: 'T' separator means time component is present
   if (isoString.includes('T') || isoString.includes('t')) {
+    // A UTC offset pins the string to an instant. PlainDateTime.from would silently
+    // drop the offset, so route these to Instant instead.
+    if (UTC_OFFSET_SUFFIX.test(isoString)) {
+      return Temporal.Instant.from(isoString);
+    }
     return Temporal.PlainDateTime.from(isoString);
   }
 

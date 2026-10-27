@@ -148,7 +148,7 @@ All functions accept both `Date` and Temporal types. When migration warnings are
 | Function | Equivalent | Notes |
 |---|---|---|
 | `format(date, fmt)` | `date-fns/format` | 18 tokens, quoted literals `'...'` |
-| `parseISO(str)` | `date-fns/parseISO` | Returns PlainDate / PlainDateTime / ZonedDateTime based on string shape |
+| `parseISO(str)` | `date-fns/parseISO` | Returns PlainDate / PlainDateTime / ZonedDateTime / Instant based on string shape |
 | `isValid(value)` | `date-fns/isValid` | Returns `false` for non-date types |
 | `addDays(date, n)` | `date-fns/addDays` | Preserves input type |
 | `addMonths(date, n)` | `date-fns/addMonths` | Month-end clamped via Temporal `constrain` |
@@ -304,7 +304,10 @@ export default defineConfig({
 `Date` is timezone-naive (UTC epoch + local wall clock). You must tell `toTemporal` which timezone to project the instant into.
 
 **`parseISO` returns different types based on string shape.**
-`'2026-06-20'` → `PlainDate`. `'2026-06-20T14:30:00'` → `PlainDateTime`. `'2026-06-20T14:30:00+02:00[Europe/Berlin]'` → `ZonedDateTime`. This mirrors how the Temporal API itself works.
+`'2026-06-20'` → `PlainDate`. `'2026-06-20T14:30:00'` → `PlainDateTime`. `'2026-06-20T14:30:00+02:00[Europe/Berlin]'` → `ZonedDateTime`. `'2026-06-20T12:30:00Z'` and `'2026-06-20T14:30:00+02:00'` → `Instant` (the offset is applied, not dropped).
+
+**Legacy `Date` values in compat functions use the system timezone.**
+`format(date, …)` and `isSameDay(a, b)` project a `Date` into the system zone, as date-fns does. Pass an explicit Temporal value if you need a different zone.
 
 **Sub-millisecond precision is lost in `fromTemporal`.**
 Temporal supports nanosecond precision; `Date` only milliseconds. `fromTemporal` truncates silently (same as `Number(instant.epochMilliseconds)`).
