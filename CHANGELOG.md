@@ -1,3 +1,11 @@
+## [0.1.5](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.4...v0.1.5) (2026-10-27)
+
+
+### Bug Fixes
+
+* **compat:** format() and isSameDay() use system timezone for Date input ([eff98e2](https://github.com/yedoma-labs/keler-temporal/commit/eff98e2e751a6145c14d2ed33981c1250964adbf))
+* **compat:** parseISO keeps Z and UTC offsets as Instant ([0a324b7](https://github.com/yedoma-labs/keler-temporal/commit/0a324b7d3e10d5cdd69b61ac079626d3851fc6a2))
+
 ## [0.1.4](https://github.com/yedoma-labs/keler-temporal/compare/v0.1.3...v0.1.4) (2026-10-26)
 
 
