@@ -10,8 +10,6 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **кэлэр** (Yakutian/Sakha) — _coming, future_
-
 Bridge library for gradual migration from legacy date libraries (date-fns, moment.js, Luxon, Day.js) to the [TC39 Temporal API](https://tc39.es/proposal-temporal/).
 
 Temporal is stable in Chrome 144+ and Node 24+, but migrating an existing codebase in one shot is impractical — this library solves that by providing converters, drop-in compat functions, and runtime migration warnings so you can replace legacy date code file-by-file without breaking anything. Your existing `Date` objects, moment instances, and Luxon DateTimes keep working while you adopt Temporal at your own pace.
